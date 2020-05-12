@@ -7,8 +7,6 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import vuetify from './plugins/vuetify.js'
 import { LMap, LTileLayer, LMarker, LControlLayers } from 'vue2-leaflet'
 
-import ''
-
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
