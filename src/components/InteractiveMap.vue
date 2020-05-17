@@ -14,8 +14,9 @@
         @update:bounds="boundsUpdated"
       >
         <l-tile-layer :url="url"></l-tile-layer>
+        <feature-layer></feature-layer>
+        <OverlayLayer class="baseOverlay"></OverlayLayer>
 
-        <OverlayLayer class = "baseOverlay"></OverlayLayer>
       </l-map>
     </div>
   </div>
@@ -24,11 +25,12 @@
 <script>
 import { latLngBounds, latLng } from 'leaflet'
 import OverlayLayer from './OverlayLayer'
+import FeatureLayer from './featureLayer'
 
 export default {
   name: 'InteractiveMap',
   components: {
-
+    FeatureLayer,
     OverlayLayer
   },
   data () {

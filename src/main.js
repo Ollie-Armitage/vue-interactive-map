@@ -6,10 +6,10 @@ import 'leaflet/dist/leaflet.css'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import vuetify from './plugins/vuetify.js'
 import { LMap, LTileLayer, LMarker, LControlLayers } from 'vue2-leaflet'
+import VueResource from 'vue-resource'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
 Vue.component('l-map', LMap)
 Vue.component('l-tile-layer', LTileLayer)
 Vue.component('l-marker', LMarker)
@@ -20,6 +20,8 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+
+Vue.use(VueResource)
 
 new Vue({
   router,

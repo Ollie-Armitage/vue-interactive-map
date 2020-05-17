@@ -10,7 +10,6 @@ export default new Vuex.Store({
     loggedIn: false,
     baseMap: null,
     currentMap: null
-
   },
   mutations: {
     // Update States a-synchronously
@@ -31,9 +30,9 @@ export default new Vuex.Store({
   actions: {
     // Instantaneous (synchronous)
   },
-  modules: {
-  },
+  modules: {},
   getters: {
+
     getLoginWindowOpen (state) {
       return state.loginPopupOpen
     },
@@ -46,6 +45,6 @@ export default new Vuex.Store({
     getLoggedIn (state) {
       return state.loggedIn
     }
-  }
 
+  }
 })
