@@ -13,7 +13,8 @@
                     </div>
                   </v-col>
                   <v-col class="d-flex justify-space-around"></v-col>
-                  <v-col cols="2" class="d-flex justify-end">
+                  <v-spacer></v-spacer>
+                  <v-col class="d-flex justify-end">
                     <v-btn rounded @click="closeForm">
                       <v-icon dark>mdi-close</v-icon>
                     </v-btn>
