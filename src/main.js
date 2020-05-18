@@ -10,6 +10,7 @@ import VueResource from 'vue-resource'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'vuetify/dist/vuetify.min.css'
 
 Vue.component('l-map', LMap)
 Vue.component('l-tile-layer', LTileLayer)
