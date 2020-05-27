@@ -7,12 +7,9 @@
             <v-card id="logbox" class="elevation-12">
               <v-toolbar dark color="#33384d">
                 <v-row>
-                  <v-col class="d-flex justify-space-around">
-                    <div v-if="title !== null">
-                      <v-toolbar-title>{{ title }}</v-toolbar-title>
-                    </div>
+                  <v-col class="d-flex justify-start">
+                    <div v-if="title !== null"><v-toolbar-title>{{ title }}</v-toolbar-title></div>
                   </v-col>
-                  <v-col class="d-flex justify-space-around"></v-col>
                   <v-spacer></v-spacer>
                   <v-col class="d-flex justify-end">
                     <v-btn rounded @click="closeForm">

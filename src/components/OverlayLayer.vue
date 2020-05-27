@@ -6,7 +6,6 @@
     <div v-else>
       <div>Logged</div>
     </div>
-
   </div>
 </template>
 

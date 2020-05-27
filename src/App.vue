@@ -2,7 +2,6 @@
   <v-app>
     <InteractiveMap></InteractiveMap>
     <Popups></Popups>
-
   </v-app>
 </template>
 

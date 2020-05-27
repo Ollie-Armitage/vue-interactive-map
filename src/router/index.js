@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import App from '../App.vue'
-import Login from '../components/Popups/Login'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -12,11 +11,6 @@ const routes = [
     path: '/',
     name: 'Root',
     component: App
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
   }
 ]
 
