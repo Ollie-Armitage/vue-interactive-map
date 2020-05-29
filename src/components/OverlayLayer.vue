@@ -1,19 +1,7 @@
 <template>
   <div>
 
-    <v-autocomplete @keydown.enter ="newSearch" outlined background-color="white" style="z-index: 1001; width:30%; margin: 20px"></v-autocomplete>
-
-    <l-control position="topright">
-      <v-btn @click="openLoginWindow" color="#33384d" dark>Login</v-btn>
-    </l-control>
-
-    <l-control position="topright">
-      <v-btn @click="openSettingsWindow" color="#33384d" dark>Settings</v-btn>
-    </l-control>
-
-    <l-control position="bottomleft">
-      <v-btn @click="newSearch('shop')" color="#33384d" dark>Display Shops</v-btn>
-    </l-control>
+    <v-autocomplete @keydown.enter ="newSearch($event.target.value)" outlined background-color="white" style="z-index: 1001; width:30%; margin: 20px"></v-autocomplete>
 
     <v-bottom-navigation
       background-color="#33384d"
@@ -22,12 +10,12 @@
       grow
       style="z-index: 1001"
     >
-      <v-btn>
+      <v-btn @click="openLoginWindow">
         <span>Login</span>
         <v-icon>mdi-login</v-icon>
       </v-btn>
 
-      <v-btn>
+      <v-btn @click="openSettingsWindow">
         <span>Settings</span>
         <v-icon>mdi-cog</v-icon>
       </v-btn>
@@ -44,15 +32,12 @@
 <script>
 import { fetchTagValue } from '../services/overpass'
 
-import { LControl } from 'vue2-leaflet'
-
 export default {
   name: 'overlay-layer',
   data () {
     return {}
   },
   components: {
-    LControl
   },
   methods: {
     LoggedInState () {
