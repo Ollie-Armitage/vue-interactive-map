@@ -1,7 +1,7 @@
 <template>
   <div>
     <l-control :position="position">
-        <v-autocomplete background-color="white" cache-items dense></v-autocomplete>
+        <v-autocomplete @keydown.enter = "$emit('searched', $event.target.value)" background-color="white" cache-items dense></v-autocomplete>
     </l-control>
   </div>
 

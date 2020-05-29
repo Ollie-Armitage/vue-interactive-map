@@ -1,7 +1,7 @@
 async function fetchOverpassData (app, query) {
   const overpassLink = 'https://overpass-api.de/api/interpreter?data=[out:json];'
-  const fullLink = overpassLink + query
-
+  const trailer = ';out;>;out;'
+  const fullLink = overpassLink + query + trailer
   return app.$http.get(fullLink).then(response => {
     return response.json()
   }).then(data => {
@@ -11,6 +11,27 @@ async function fetchOverpassData (app, query) {
   })
 }
 
-export async function fetchTag (app, query) {
-  return fetchOverpassData(app, '(node["' + query + '"](51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133);way["' + query + '"](51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133);relation["' + query + '"](51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133););out;')
+export async function fetchTagValue (app, query) {
+  // Should search name, building, shop, amenity, addr:housenumber, parking, wheelchair, construction, leisure, sport,
+
+  const categoryList = ['name', 'building', 'shop', 'amenity', 'addr:housenumber', 'parking', 'wheelchair', 'construction', 'leisure', 'sport']
+
+  let finalQuery = '('
+  const boundingBox = '(51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133)'
+
+  if (categoryList.includes(query)) {
+    finalQuery = finalQuery + 'node["' + query + '"]' + boundingBox + ';way["' + query + '"]' + boundingBox + ';relation["' + query + '"]' + boundingBox + ';)'
+    return fetchOverpassData(app, finalQuery)
+  }
+
+  categoryList.forEach(function (item) {
+    finalQuery = finalQuery +
+      'node["' + item + '" = "' + query + '"]' + boundingBox + ';' +
+      'way["' + item + '" = "' + query + '" ]' + boundingBox + ';' +
+      'relation["' + item + '" = "' + query + '"]' + boundingBox + ';'
+  })
+
+  finalQuery = finalQuery + ')'
+
+  return fetchOverpassData(app, finalQuery)
 }

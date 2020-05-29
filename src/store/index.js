@@ -10,7 +10,8 @@ export default new Vuex.Store({
     loggedIn: false,
     baseMap: null,
     currentMap: null,
-    queryData: []
+    currentSearch: null,
+    currentlyLoading: false
   },
   mutations: {
     // Update States a-synchronously
@@ -26,6 +27,12 @@ export default new Vuex.Store({
     },
     setCurrentMap (state, currentMap) {
       state.currentMap = currentMap
+    },
+    setCurrentSearch (state, search) {
+      state.currentSearch = search
+    },
+    setLoadingState (state, loading) {
+      state.currentlyLoading = loading
     }
   },
   actions: {
@@ -45,6 +52,12 @@ export default new Vuex.Store({
     },
     getLoggedIn (state) {
       return state.loggedIn
+    },
+    getCurrentSearch (state) {
+      return state.currentSearch
+    },
+    getLoadingState (state) {
+      return state.currentlyLoading
     }
 
   }
