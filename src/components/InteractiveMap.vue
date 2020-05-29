@@ -12,6 +12,7 @@
         @update:zoom="zoomUpdated"
         @update:center="centerUpdated"
         @update:bounds="boundsUpdated"
+        :options="{zoomControl:false, attributionControl: false}"
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <FeatureLayer></FeatureLayer>
@@ -36,20 +37,18 @@ export default {
   data () {
     return {
       url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',
-      zoom: 16,
-      center: [51.3781, -2.3268],
-      maxBounds: latLngBounds(
-        latLng(51.3823, -2.3372),
-        latLng(51.3710, -2.3161)
-      ),
-      bounds: latLngBounds(
-        latLng(51.3823, -2.3372),
-        latLng(51.3710, -2.3161)
-      ),
+      zoom: 18,
       maxZoom: 18,
       minZoom: 16,
-      mapData: null,
-      showHere: false
+      center: [51.3781, -2.3268],
+      maxBounds: latLngBounds(
+        latLng(51.368091901418, -2.3417186737061),
+        latLng(51.386111062521, -2.3105192184448)
+      ),
+      bounds: latLngBounds(
+        latLng(51.368091901418, -2.3417186737061),
+        latLng(51.386111062521, -2.3105192184448)
+      )
     }
   },
   methods: {
