@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <button @click="getData">Get data</button>
     <InteractiveMap></InteractiveMap>
     <Popups></Popups>
   </v-app>
@@ -8,6 +9,7 @@
 <script>
 import InteractiveMap from './components/InteractiveMap'
 import Popups from './components/Popups'
+import { fetchOverpassData } from './services/overpass'
 
 export default {
   name: 'App',
@@ -17,17 +19,9 @@ export default {
     Popups
   },
   methods: {
-    fetchOverpassData: function (query) {
-      const overpassLink = 'https://overpass-api.de/api/interpreter?data='
-      const fullLink = overpassLink + query
-
-      this.$http.get(fullLink).then(response => {
-        console.log('Obtained OSM data through Overpass query: ' + query)
-        return response.json()
-      }).then(data => {
-        this.$store.commit('setMapData', data)
-        console.log(data)
-      })
+    getData () {
+      fetchOverpassData(this,
+        'way(51.372265237935,-2.3359036445618,51.382535507549,-2.3177890777588);(._;>;);out;')
     }
   }
 }
