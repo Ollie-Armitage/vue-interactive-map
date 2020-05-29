@@ -1,7 +1,12 @@
 <template>
   <div>
+    <v-container fluid>
+      <v-flex xs12 md6 lg3>
+        <v-autocomplete @keydown.enter="newSearch($event.target.value)" outlined background-color="white"
+                        style="z-index: 1001;margin: 20px;" class=""></v-autocomplete>
+      </v-flex>
 
-    <v-autocomplete @keydown.enter ="newSearch($event.target.value)" outlined background-color="white" style="z-index: 1001; width:30%; margin: 20px"></v-autocomplete>
+    </v-container>
 
     <v-bottom-navigation
       background-color="#33384d"
@@ -37,8 +42,7 @@ export default {
   data () {
     return {}
   },
-  components: {
-  },
+  components: {},
   methods: {
     LoggedInState () {
       return this.$store.getters.getLoggedIn
