@@ -10,3 +10,7 @@ export function fetchOverpassData (app, query) {
     return data
   })
 }
+
+export function fetchTag (app, query) {
+  return fetchOverpassData(app, '(node["' + query + '"](51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133);way["' + query + '"](51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133);relation["' + query + '"](51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133););out;')
+}

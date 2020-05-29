@@ -14,6 +14,7 @@
         @update:bounds="boundsUpdated"
       >
         <l-tile-layer :url="url"></l-tile-layer>
+        <button @click="getData('shop')">Get Shops</button>
         <OverlayLayer class="baseOverlay"></OverlayLayer>
 
       </l-map>
@@ -24,6 +25,7 @@
 <script>
 import { latLngBounds, latLng } from 'leaflet'
 import OverlayLayer from './OverlayLayer'
+import { fetchTag } from '../services/overpass'
 
 export default {
   name: 'InteractiveMap',
@@ -44,7 +46,8 @@ export default {
         latLng(51.3710, -2.3161)
       ),
       maxZoom: 18,
-      minZoom: 16
+      minZoom: 16,
+      mapData: null
     }
   },
   methods: {
@@ -56,10 +59,10 @@ export default {
     },
     boundsUpdated (bounds) {
       this.bounds = bounds
+    },
+    getData (dataType) {
+      this.mapData = fetchTag(this, 'shop')
     }
-  },
-  mounted () {
-    this.$store.commit('setBaseMap', this.$refs.map)
   }
 }
 

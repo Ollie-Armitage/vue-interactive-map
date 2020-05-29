@@ -1,8 +1,7 @@
 <template>
   <div>
     <Login @closeWindow="closeLoginWindow" v-if="this.$store.getters.getLoginWindowOpen === true"></Login>
-    <Settings @closeWindow="closeSettingsWindow"
-              v-if="this.$store.getters.getSettingsWindowOpen === true"></Settings>
+    <Settings @closeWindow="closeSettingsWindow" v-if="this.$store.getters.getSettingsWindowOpen === true"></Settings>
   </div>
 </template>
 
