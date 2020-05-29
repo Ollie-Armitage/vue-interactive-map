@@ -15,6 +15,14 @@
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <button @click="getData('shop')">Get Shops</button>
+        <button @click="showHere = true">Put shops on map</button>
+        <div v-if="showHere === true">
+          <div v-for="(mapFeature) in mapData.features" :key="mapFeature">
+            <l-marker :lat-lng="[mapFeature.geometry.coordinates[1], mapFeature.geometry.coordinates[0]]">
+            </l-marker>
+          </div>
+        </div>
+
         <OverlayLayer class="baseOverlay"></OverlayLayer>
 
       </l-map>
@@ -26,11 +34,13 @@
 import { latLngBounds, latLng } from 'leaflet'
 import OverlayLayer from './OverlayLayer'
 import { fetchTag } from '../services/overpass'
+import { LMarker } from 'vue2-leaflet'
 
 export default {
   name: 'InteractiveMap',
   components: {
-    OverlayLayer
+    OverlayLayer,
+    LMarker
   },
   data () {
     return {
@@ -47,7 +57,8 @@ export default {
       ),
       maxZoom: 18,
       minZoom: 16,
-      mapData: null
+      mapData: null,
+      showHere: false
     }
   },
   methods: {
@@ -60,8 +71,10 @@ export default {
     boundsUpdated (bounds) {
       this.bounds = bounds
     },
-    getData (dataType) {
-      this.mapData = fetchTag(this, 'shop')
+    async getData (dataType) {
+      this.mapData = await fetchTag(this, dataType).then(value => {
+        return value
+      })
     }
   }
 }

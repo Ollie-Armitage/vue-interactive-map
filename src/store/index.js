@@ -9,7 +9,8 @@ export default new Vuex.Store({
     settingsBarOpen: false,
     loggedIn: false,
     baseMap: null,
-    currentMap: null
+    currentMap: null,
+    queryData: []
   },
   mutations: {
     // Update States a-synchronously
