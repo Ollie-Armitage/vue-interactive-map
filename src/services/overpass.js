@@ -43,9 +43,9 @@ export async function fetchSearchList (app) {
 }
 
 export async function fetchPlace (app, query) {
+  if (query === '') return null
   query = query.replace('&', '%26')
 
-  if (query === '') return null
   // Should search name, building, shop, amenity, addr:housenumber, parking, wheelchair, construction, leisure, sport,
 
   const categoryList = ['name', 'addr:housenumber']
@@ -68,4 +68,34 @@ export async function fetchPlace (app, query) {
   finalQuery = finalQuery + ')'
 
   return fetchOverpassData(app, finalQuery)
+}
+
+export async function getLocation (app, locationName) {
+  let returnValue = null
+
+  return await fetchPlace(app, locationName).then((output) => {
+    output.features.forEach((feature) => {
+      if (feature.geometry.type === 'Point' && feature.properties.entrance === 'yes') {
+        returnValue = feature.geometry.coordinates
+      }
+    })
+
+    if (returnValue === null) {
+      output.features.forEach((feature) => {
+        if (feature.geometry.type === 'Point') {
+          returnValue = feature.geometry.coordinates
+        }
+      })
+    }
+
+    if (returnValue === null) {
+      output.features.forEach((feature) => {
+        if (feature.geometry.type === 'Polygon') {
+          returnValue = feature.geometry.coordinates[0][0]
+        }
+      })
+    }
+
+    return returnValue
+  })
 }
