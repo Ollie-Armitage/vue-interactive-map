@@ -1,5 +1,6 @@
 <template>
   <div class="map">
+
     <div class="row map position-absolute">
       <l-map
         ref="map"
@@ -16,8 +17,6 @@
       >
         <l-tile-layer :url="url"></l-tile-layer>
         <FeatureLayer></FeatureLayer>
-        <OverlayLayer class="baseOverlay"></OverlayLayer>
-
       </l-map>
     </div>
   </div>
@@ -25,14 +24,12 @@
 
 <script>
 import { latLngBounds, latLng } from 'leaflet'
-import OverlayLayer from './OverlayLayer'
 import FeatureLayer from './FeatureLayer'
 
 export default {
   name: 'InteractiveMap',
   components: {
-    FeatureLayer,
-    OverlayLayer
+    FeatureLayer
   },
   data () {
     return {
@@ -66,11 +63,10 @@ export default {
 
 </script>
 
-<style scoped lang="scss">
-  .map {
+<style>
+  html, body, .map {
     height: 100vh;
-    width: 99vw;
-    padding-left: 10px;
+    width: 100vw;
     z-index: 0;
   }
 </style>

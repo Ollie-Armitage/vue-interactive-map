@@ -12,7 +12,8 @@ import Settings from './Popups/Settings'
 export default {
   name: 'Popups',
   components: {
-    Login, Settings
+    Login,
+    Settings
   },
   methods: {
     closeLoginWindow () {

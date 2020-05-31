@@ -11,7 +11,8 @@ export default new Vuex.Store({
     baseMap: null,
     currentMap: null,
     currentSearch: null,
-    currentlyLoading: false
+    currentlyLoading: false,
+    currentRoute: null
   },
   mutations: {
     // Update States a-synchronously
@@ -29,10 +30,28 @@ export default new Vuex.Store({
       state.currentMap = currentMap
     },
     setCurrentSearch (state, search) {
+      if (search === null) {
+        state.currentSearch = null
+        return null
+      }
+
+      // Only store polygons in search results
+
+      const endSearch = []
+      search.features.forEach((item, index) => {
+        if (item.geometry.type === 'Polygon') {
+          endSearch.push(item)
+        }
+      }
+      )
+      search.features = endSearch
       state.currentSearch = search
     },
     setLoadingState (state, loading) {
       state.currentlyLoading = loading
+    },
+    setCurrentRoute (state, route) {
+      state.currentRoute = route
     }
   },
   actions: {
@@ -58,6 +77,9 @@ export default new Vuex.Store({
     },
     getLoadingState (state) {
       return state.currentlyLoading
+    },
+    getCurrentRoute (state) {
+      return state.currentRoute
     }
 
   }
