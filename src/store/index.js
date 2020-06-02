@@ -12,10 +12,14 @@ export default new Vuex.Store({
     currentMap: null,
     currentSearch: null,
     currentlyLoading: false,
-    currentRoute: null
+    currentRoute: null,
+    routeMarkers: []
   },
   mutations: {
     // Update States a-synchronously
+    setRouteMarkers (state, payload) {
+      state.routeMarkers = payload
+    },
     setLoginPopupOpen (state, payload) {
       state.loginPopupOpen = payload
     },
@@ -80,6 +84,9 @@ export default new Vuex.Store({
     },
     getCurrentRoute (state) {
       return state.currentRoute
+    },
+    getRouteMarkers (state) {
+      return state.routeMarkers
     }
 
   }

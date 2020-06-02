@@ -7,29 +7,38 @@
       outlined background-color="white"
       style="margin: 20px;">
     </v-autocomplete>
+    <div v-if="!$auth.loading">
+      <v-bottom-navigation
+        background-color="#33384d"
+        dark
+        fixed
+        grow
+      >
 
-    <v-bottom-navigation
-      background-color="#33384d"
-      dark
-      fixed
-      grow
-    >
-      <v-btn @click="openLoginWindow">
-        <span>Login</span>
-        <v-icon>mdi-login</v-icon>
-      </v-btn>
+        <!-- show login when not authenticated -->
+        <v-btn v-if="!$auth.isAuthenticated" @click="login">
+          <span>Login</span>
 
-      <v-btn @click="openSettingsWindow">
-        <span>Settings</span>
-        <v-icon>mdi-cog</v-icon>
-      </v-btn>
+          <v-icon>mdi-login</v-icon>
+        </v-btn>
+        <!-- show logout when authenticated -->
+        <v-btn v-if="$auth.isAuthenticated" @click="logout">
+          <span>Logout</span>
 
-      <v-btn @click="directionsSheet = !directionsSheet">
-        <span>Directions</span>
-        <v-icon>mdi-map-marker</v-icon>
-      </v-btn>
-    </v-bottom-navigation>
+          <v-icon>mdi-login</v-icon>
+        </v-btn>
 
+        <v-btn @click="openSettingsWindow">
+          <span>Settings</span>
+          <v-icon>mdi-cog</v-icon>
+        </v-btn>
+
+        <v-btn @click="directionsSheet = !directionsSheet">
+          <span>Directions</span>
+          <v-icon>mdi-map-marker</v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+    </div>
     <v-bottom-sheet v-model="directionsSheet" hide-overlay persistent>
       <v-sheet class="text-center" height="300px">
         <v-app-bar color="#33384d" dark>Get Directions
@@ -40,8 +49,10 @@
         </v-app-bar>
         <div class="m-4">
           <v-form>
-            <v-autocomplete label="First Location" :items=searchItems :search-input.sync="firstLocation" hide-no-data clearable></v-autocomplete>
-            <v-autocomplete label="Second Location" :items=searchItems :search-input.sync="secondLocation" hide-no-data clearable></v-autocomplete>
+            <v-autocomplete label="First Location" :items=searchItems :search-input.sync="firstLocation" hide-no-data
+                            clearable></v-autocomplete>
+            <v-autocomplete label="Second Location" :items=searchItems :search-input.sync="secondLocation" hide-no-data
+                            clearable></v-autocomplete>
             <v-btn color="#33384d" @click="locate" dark>Search</v-btn>
           </v-form>
 
@@ -54,7 +65,6 @@
 </template>
 
 <script>
-
 import { fetchPlace, fetchSearchList, getLocation } from '../services/overpass'
 import { calculateRoute } from '../services/openrouteservice'
 
@@ -72,6 +82,15 @@ export default {
   },
   components: {},
   methods: {
+    login () {
+      this.$auth.loginWithRedirect()
+    },
+    // Log the user out
+    logout () {
+      this.$auth.logout({
+        returnTo: window.location.origin
+      })
+    },
     async newSearch (search) {
       console.log(search)
       this.$store.commit('setLoadingState', true)
@@ -83,8 +102,11 @@ export default {
     async locate () {
       if (this.firstLocation !== null && this.secondLocation !== null) {
         await calculateRoute(this, await getLocation(this, this.firstLocation), await getLocation(this, this.secondLocation))
-        this.directionsSheet = false
+      } else {
+        this.$store.commit('setCurrentRoute', null)
+        this.$store.commit('setRouteMarkers', null)
       }
+      this.directionsSheet = false
     },
     openLoginWindow: function (event) {
       this.$store.commit('setLoginPopupOpen', true)

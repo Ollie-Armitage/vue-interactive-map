@@ -6,7 +6,7 @@
     <div v-if="!this.$store.getters.getLoadingState && this.$store.getters.getCurrentRoute != null">
       <l-geo-json :geojson="this.$store.getters.getCurrentRoute.features" :options=routeOptions></l-geo-json>
     </div>
-    <l-marker v-for="marker in markers" :lat-lng="marker" :key="marker"></l-marker>
+    <l-marker v-for="(marker) in this.$store.getters.getRouteMarkers" :lat-lng="marker" :key="marker.id"></l-marker>
   </div>
 
 </template>
@@ -38,8 +38,8 @@ export default {
         },
         onEachFeature: function onEachFeature (feature, layer) {
           if (feature.properties) {
-            const str = JSON.stringify(feature.properties, null, 2)
-            layer.bindPopup('Properties: ' + str)
+            const str = JSON.stringify(feature.properties.name, null, 2)
+            layer.bindPopup(str)
           }
         }
       },
@@ -51,12 +51,16 @@ export default {
           }
         },
         onEachFeature: function onEachFeature (feature, layer) {
-          this.markers.push(feature.geometry.coordinates[0])
+          if (feature.properties) {
+            const str = JSON.stringify(feature.properties, null, 2)
+            layer.bindPopup(str)
+          }
         }
       }
 
     }
   }
+
 }
 </script>
 

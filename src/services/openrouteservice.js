@@ -11,11 +11,22 @@ export async function calculateRoute (app, point1, point2) {
   request.onreadystatechange = function () {
     if (this.readyState === 4) {
       const data = JSON.parse(request.responseText)
-      data.features.push(point1)
-      data.features.push(point2)
-      console.log(data)
       app.$store.commit('setCurrentRoute', data)
+
+      addMarkers(app, data.features[0])
+      console.log(data.features[0])
     }
   }
   request.send()
+}
+
+async function addMarkers (app, feature) {
+  const currentRouteMarkers = []
+  const coord1 = feature.geometry.coordinates[0].slice().reverse()
+  const coord2 = feature.geometry.coordinates[feature.geometry.coordinates.length - 1].slice().reverse()
+
+  currentRouteMarkers.push(coord1)
+  currentRouteMarkers.push(coord2)
+
+  app.$store.commit('setRouteMarkers', currentRouteMarkers)
 }
