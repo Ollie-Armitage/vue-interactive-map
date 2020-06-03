@@ -1,0 +1,5 @@
+{
+  "OpenStreetMaps": "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png",
+  "WikimediaMaps": "https://maps.wikimedia.org/osm-intl/${z}/${x}/${y}.png",
+  "HumanitarianMaps": "http://a.tile.openstreetmap.fr/hot/${z}/${x}/${y}.png"
+}

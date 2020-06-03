@@ -38,7 +38,7 @@ export default {
         },
         onEachFeature: function onEachFeature (feature, layer) {
           if (feature.properties) {
-            const str = JSON.stringify(feature.properties.name, null, 2)
+            const str = JSON.stringify(feature.properties, null, 2)
             layer.bindPopup(str)
           }
         }
@@ -53,6 +53,7 @@ export default {
         onEachFeature: function onEachFeature (feature, layer) {
           if (feature.properties) {
             const str = JSON.stringify(feature.properties, null, 2)
+            console.log(str)
             layer.bindPopup(str)
           }
         }

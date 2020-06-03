@@ -15,7 +15,7 @@
         @update:bounds="boundsUpdated"
         :options="{zoomControl:false, attributionControl: false}"
       >
-        <l-tile-layer :url="url"></l-tile-layer>
+        <l-tile-layer :url="this.$store.getters.getTileLayer"></l-tile-layer>
         <FeatureLayer></FeatureLayer>
       </l-map>
     </div>
@@ -33,7 +33,6 @@ export default {
   },
   data () {
     return {
-      url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',
       zoom: 18,
       maxZoom: 18,
       minZoom: 16,

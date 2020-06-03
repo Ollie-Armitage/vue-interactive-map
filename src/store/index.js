@@ -13,10 +13,14 @@ export default new Vuex.Store({
     currentSearch: null,
     currentlyLoading: false,
     currentRoute: null,
-    routeMarkers: []
+    routeMarkers: [],
+    currentTileLayer: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png'
   },
   mutations: {
     // Update States a-synchronously
+    setCurrentTileLayer (state, payload) {
+      state.currentTileLayer = payload
+    },
     setRouteMarkers (state, payload) {
       state.routeMarkers = payload
     },
@@ -87,6 +91,9 @@ export default new Vuex.Store({
     },
     getRouteMarkers (state) {
       return state.routeMarkers
+    },
+    getTileLayer (state) {
+      return state.currentTileLayer
     }
 
   }
