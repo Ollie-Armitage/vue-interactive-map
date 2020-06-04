@@ -7,9 +7,10 @@
 </template>
 
 <script>
-import InteractiveMap from './components/InteractiveMap'
+import InteractiveMap from './components/LeafletMap/InteractiveMap'
 import Popups from './components/Popups'
 import Overlay from './components/Overlay'
+import { downloadBaseData } from './services/overpass'
 
 export default {
   name: 'App',
@@ -24,7 +25,13 @@ export default {
       drawer: true
     }
   },
-  methods: {}
+  methods: {},
+  async created () {
+    const baseData = await downloadBaseData(this)
+    this.$store.commit('setLoadingState', true)
+    this.$store.commit('setBaseLayer', baseData)
+    this.$store.commit('setLoadingState', false)
+  }
 }
 </script>
 

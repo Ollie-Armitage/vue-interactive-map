@@ -12,7 +12,7 @@
   </uForm>
 </template>
 <script>
-import uForm from '../BaseTypes/uForm'
+import uForm from './uForm'
 
 export default {
   name: 'Login',

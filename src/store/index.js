@@ -8,16 +8,19 @@ export default new Vuex.Store({
     loginPopupOpen: false,
     settingsBarOpen: false,
     loggedIn: false,
-    baseMap: null,
     currentMap: null,
-    currentSearch: null,
+    selectedValue: null,
     currentlyLoading: false,
     currentRoute: null,
     routeMarkers: [],
-    currentTileLayer: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png'
+    currentTileLayer: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',
+    baseLayerJSON: null
   },
   mutations: {
     // Update States a-synchronously
+    setBaseLayer (state, payload) {
+      state.baseLayerJSON = payload
+    },
     setCurrentTileLayer (state, payload) {
       state.currentTileLayer = payload
     },
@@ -37,9 +40,9 @@ export default new Vuex.Store({
     setCurrentMap (state, currentMap) {
       state.currentMap = currentMap
     },
-    setCurrentSearch (state, search) {
+    setSelectedValue (state, search) {
       if (search === null) {
-        state.currentSearch = null
+        state.selectedValue = null
         return null
       }
 
@@ -53,7 +56,7 @@ export default new Vuex.Store({
       }
       )
       search.features = endSearch
-      state.currentSearch = search
+      state.selectedValue = search
     },
     setLoadingState (state, loading) {
       state.currentlyLoading = loading
@@ -67,7 +70,9 @@ export default new Vuex.Store({
   },
   modules: {},
   getters: {
-
+    getBaseLayer (state) {
+      return state.baseLayerJSON
+    },
     getLoginWindowOpen (state) {
       return state.loginPopupOpen
     },
@@ -80,9 +85,6 @@ export default new Vuex.Store({
     getLoggedIn (state) {
       return state.loggedIn
     },
-    getCurrentSearch (state) {
-      return state.currentSearch
-    },
     getLoadingState (state) {
       return state.currentlyLoading
     },
@@ -94,6 +96,9 @@ export default new Vuex.Store({
     },
     getTileLayer (state) {
       return state.currentTileLayer
+    },
+    getSelectedValue (state) {
+      return state.selectedValue
     }
 
   }

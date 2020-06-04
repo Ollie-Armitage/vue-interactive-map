@@ -1,4 +1,7 @@
-async function fetchOverpassData (app, query) {
+
+const boundingBox = '(51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133)'
+
+export async function fetchOverpassDataFromQuery (app, query) {
   if (query === '') return null
   const overpassLink = 'https://overpass-api.de/api/interpreter?data=[out:json];'
   const trailer = ';out;>;out;'
@@ -11,11 +14,12 @@ async function fetchOverpassData (app, query) {
   })
 }
 
-export async function fetchSearchList (app) {
+// Fetch the autocomplete search list.
+
+export async function fetchBaseSearchList (app) {
   const categoryList = ['name', 'addr:housenumber']
 
   let finalQuery = '('
-  const boundingBox = '(51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133)'
 
   categoryList.forEach(function (item) {
     finalQuery = finalQuery +
@@ -26,7 +30,7 @@ export async function fetchSearchList (app) {
 
   finalQuery = finalQuery + ')'
 
-  const searchJson = await fetchOverpassData(app, finalQuery)
+  const searchJson = await fetchOverpassDataFromQuery(app, finalQuery)
 
   const searchNames = []
 
@@ -42,7 +46,12 @@ export async function fetchSearchList (app) {
   return [...new Set(searchNames)]
 }
 
-export async function fetchPlace (app, query) {
+export async function downloadBaseData (app) {
+  const query = '(way(51.371445493151,-2.3362255096436,51.382468546926,-2.3178148269653);)'
+  return await fetchOverpassDataFromQuery(app, query)
+}
+
+export async function queryOverpass (app, query) {
   if (query === '') return null
   query = query.replace('&', '%26')
 
@@ -51,11 +60,10 @@ export async function fetchPlace (app, query) {
   const categoryList = ['name', 'addr:housenumber']
 
   let finalQuery = '('
-  const boundingBox = '(51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133)'
 
   if (categoryList.includes(query)) {
     finalQuery = finalQuery + 'node["' + query + '"]' + boundingBox + ';way["' + query + '"]' + boundingBox + ';relation["' + query + '"]' + boundingBox + ';)'
-    return fetchOverpassData(app, finalQuery)
+    return fetchOverpassDataFromQuery(app, finalQuery)
   }
 
   categoryList.forEach(function (item) {
@@ -67,13 +75,13 @@ export async function fetchPlace (app, query) {
 
   finalQuery = finalQuery + ')'
 
-  return fetchOverpassData(app, finalQuery)
+  return fetchOverpassDataFromQuery(app, finalQuery)
 }
 
-export async function getLocation (app, locationName) {
+export async function getNamedLocationCoordinates (app, locationName) {
   let returnValue = null
 
-  return await fetchPlace(app, locationName).then((output) => {
+  return await queryOverpass(app, locationName).then((output) => {
     output.features.forEach((feature) => {
       if (feature.geometry.type === 'Point' && feature.properties.entrance === 'yes') {
         returnValue = feature.geometry.coordinates

@@ -14,6 +14,7 @@
         @update:center="centerUpdated"
         @update:bounds="boundsUpdated"
         :options="{zoomControl:false, attributionControl: false}"
+        @click="mapClick"
       >
         <l-tile-layer :url="this.$store.getters.getTileLayer"></l-tile-layer>
         <FeatureLayer></FeatureLayer>
@@ -56,6 +57,9 @@ export default {
     },
     boundsUpdated (bounds) {
       this.bounds = bounds
+    },
+    async mapClick (event) {
+      // const latlng = event.latlng
     }
   }
 }

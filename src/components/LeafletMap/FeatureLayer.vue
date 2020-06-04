@@ -1,12 +1,18 @@
 <template>
   <div>
-    <div v-if="!this.$store.getters.getLoadingState && this.$store.getters.getCurrentSearch != null">
-      <l-geo-json :geojson="this.$store.getters.getCurrentSearch.features" :options=options></l-geo-json>
+
+    <div v-if="!this.$store.getters.getLoadingState && this.$store.getters.getSelectedValue !== null">
+        <l-geo-json :lat-lngs="this.$store.getters.getSelectedValue.features"  :options=searchOptions></l-geo-json>
     </div>
-    <div v-if="!this.$store.getters.getLoadingState && this.$store.getters.getCurrentRoute != null">
+
+    <div v-if="!this.$store.getters.getLoadingState && this.$store.getters.getCurrentRoute !== null">
       <l-geo-json :geojson="this.$store.getters.getCurrentRoute.features" :options=routeOptions></l-geo-json>
     </div>
-    <l-marker v-for="(marker) in this.$store.getters.getRouteMarkers" :lat-lng="marker" :key="marker.id"></l-marker>
+
+    <div v-if="!this.$store.getters.getLoadingState && this.$store.getters.getRouteMarkers !== null">
+      <l-marker v-for="(marker) in this.$store.getters.getRouteMarkers" :lat-lng="marker" :key="marker.id"></l-marker>
+    </div>
+
   </div>
 
 </template>
@@ -22,18 +28,22 @@ export default {
   data () {
     return {
       markers: [],
-      options: {
+      baseOptions: {
         style: function (feature) {
-          if (feature.properties.in_port) {
-            return {
-              weight: 4,
-              color: '#00FF00'
-            }
-          } else {
-            return {
-              weight: 4,
-              color: '#FF0000'
-            }
+          return {
+          }
+        },
+        onEachFeature: function onEachFeature (feature, layer) {
+          layer.on('click', function (e) {
+            console.log(e)
+          })
+        }
+      },
+      searchOptions: {
+        style: function (feature) {
+          return {
+            weight: 4,
+            color: '#FF0000'
           }
         },
         onEachFeature: function onEachFeature (feature, layer) {
@@ -53,7 +63,6 @@ export default {
         onEachFeature: function onEachFeature (feature, layer) {
           if (feature.properties) {
             const str = JSON.stringify(feature.properties, null, 2)
-            console.log(str)
             layer.bindPopup(str)
           }
         }

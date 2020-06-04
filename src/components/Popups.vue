@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Login from './Popups/Login'
-import Settings from './Popups/Settings'
+import Login from './Login'
+import Settings from './Settings'
 
 export default {
   name: 'Popups',
