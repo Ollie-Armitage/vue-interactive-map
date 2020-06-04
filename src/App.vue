@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <InteractiveMap></InteractiveMap>
-    <Popups></Popups>
     <Overlay></Overlay>
+    <Popups></Popups>
   </v-app>
 </template>
 
@@ -10,7 +10,7 @@
 import InteractiveMap from './components/LeafletMap/InteractiveMap'
 import Popups from './components/Popups'
 import Overlay from './components/Overlay'
-import { downloadBaseData } from './services/overpass'
+import { fetchBaseData } from './services/overpass'
 
 export default {
   name: 'App',
@@ -26,10 +26,10 @@ export default {
     }
   },
   methods: {},
-  async created () {
-    const baseData = await downloadBaseData(this)
+  async beforeMount () {
     this.$store.commit('setLoadingState', true)
-    this.$store.commit('setBaseLayer', baseData)
+    this.$store.commit('setBaseData', await fetchBaseData(this))
+    this.$store.commit('')
     this.$store.commit('setLoadingState', false)
   }
 }

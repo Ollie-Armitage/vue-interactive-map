@@ -1,7 +1,7 @@
 <template>
   <div class="map">
 
-    <div class="row map position-absolute">
+    <div class="map position-absolute">
       <l-map
         ref="map"
         :zoom="zoom"
@@ -13,7 +13,10 @@
         @update:zoom="zoomUpdated"
         @update:center="centerUpdated"
         @update:bounds="boundsUpdated"
-        :options="{zoomControl:false, attributionControl: false}"
+        :options="{
+          zoomControl:false,
+          attributionControl: false
+        }"
         @click="mapClick"
       >
         <l-tile-layer :url="this.$store.getters.getTileLayer"></l-tile-layer>

@@ -3,7 +3,7 @@
 
     <v-autocomplete
       @keydown.enter="newSearch($event.target.value)"
-      :items=searchItems
+      :items=searchBarDataList
       outlined background-color="white"
       style="margin: 20px;">
     </v-autocomplete>
@@ -51,9 +51,9 @@
         </v-app-bar>
         <div class="m-4">
           <v-form>
-            <v-autocomplete label="First Location" :items=searchItems :search-input.sync="firstLocation" hide-no-data
+            <v-autocomplete label="First Location" :items=this.$store.getters.getBaseDataNames :search-input.sync="firstLocation" hide-no-data
                             clearable></v-autocomplete>
-            <v-autocomplete label="Second Location" :items=searchItems :search-input.sync="secondLocation" hide-no-data
+            <v-autocomplete label="Second Location" :items=this.$store.getters.getBaseDataNames :search-input.sync="secondLocation" hide-no-data
                             clearable></v-autocomplete>
             <v-btn color="#33384d" @click="locate" dark>Search</v-btn>
           </v-form>
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { queryOverpass, fetchBaseSearchList, getNamedLocationCoordinates } from '../services/overpass'
+import { queryOverpass, getNamedLocationCoordinates } from '../services/overpass'
 import { calculateRoute, removeMarkers } from '../services/openrouteservice'
 
 export default {
@@ -101,15 +101,13 @@ export default {
     return {
       directionsSettings: false,
       directionsBar: false,
-      searchItems: [],
       firstLocation: null,
       secondLocation: null,
       instructionList: [],
-      instructionIndex: 0
-
+      instructionIndex: 0,
+      searchBarDataList: null
     }
   },
-  components: {},
   methods: {
     closeDirections () {
       this.directionsBar = !this.directionsBar
@@ -165,8 +163,12 @@ export default {
       this.$store.commit('setSettingsPopupOpen', true)
     }
   },
-  async mounted () {
-    this.searchItems = await fetchBaseSearchList(this)
+  created () {
+    this.$store.watch(
+      this.$store.getters.getBaseData, () => {
+
+      }
+    )
   }
 }
 </script>

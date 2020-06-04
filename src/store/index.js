@@ -8,18 +8,17 @@ export default new Vuex.Store({
     loginPopupOpen: false,
     settingsBarOpen: false,
     loggedIn: false,
-    currentMap: null,
     selectedValue: null,
     currentlyLoading: false,
     currentRoute: null,
     routeMarkers: [],
     currentTileLayer: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png',
-    baseLayerJSON: null
+    baseData: null
   },
   mutations: {
     // Update States a-synchronously
-    setBaseLayer (state, payload) {
-      state.baseLayerJSON = payload
+    setBaseData (state, payload) {
+      state.baseData = payload
     },
     setCurrentTileLayer (state, payload) {
       state.currentTileLayer = payload
@@ -36,9 +35,6 @@ export default new Vuex.Store({
     setBaseMap (state, baseMap) {
       state.baseMap = baseMap
       state.currentMap = baseMap
-    },
-    setCurrentMap (state, currentMap) {
-      state.currentMap = currentMap
     },
     setSelectedValue (state, search) {
       if (search === null) {
@@ -70,17 +66,14 @@ export default new Vuex.Store({
   },
   modules: {},
   getters: {
-    getBaseLayer (state) {
-      return state.baseLayerJSON
+    getBaseData (state) {
+      return state.baseData
     },
     getLoginWindowOpen (state) {
       return state.loginPopupOpen
     },
     getSettingsWindowOpen (state) {
       return state.settingsBarOpen
-    },
-    getCurrentMap (state) {
-      return state.currentMap
     },
     getLoggedIn (state) {
       return state.loggedIn

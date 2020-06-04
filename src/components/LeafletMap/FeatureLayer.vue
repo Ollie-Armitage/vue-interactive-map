@@ -1,16 +1,20 @@
 <template>
-  <div>
+  <div v-if="!this.$store.getters.getLoadingState">
 
-    <div v-if="!this.$store.getters.getLoadingState && this.$store.getters.getSelectedValue !== null">
-        <l-geo-json :lat-lngs="this.$store.getters.getSelectedValue.features"  :options=searchOptions></l-geo-json>
+    <div v-if="this.$store.getters.getSelectedValue !== null">
+        <l-geo-json :lat-lngs="this.$store.getters.getSelectedValue.features"
+                    :options=searchOptions></l-geo-json>
     </div>
 
-    <div v-if="!this.$store.getters.getLoadingState && this.$store.getters.getCurrentRoute !== null">
-      <l-geo-json :geojson="this.$store.getters.getCurrentRoute.features" :options=routeOptions></l-geo-json>
+    <div v-if="this.$store.getters.getCurrentRoute !== null">
+      <l-geo-json :geojson="this.$store.getters.getCurrentRoute.features"
+                  :options=routeOptions></l-geo-json>
     </div>
 
-    <div v-if="!this.$store.getters.getLoadingState && this.$store.getters.getRouteMarkers !== null">
-      <l-marker v-for="(marker) in this.$store.getters.getRouteMarkers" :lat-lng="marker" :key="marker.id"></l-marker>
+    <div v-if="this.$store.getters.getRouteMarkers !== null">
+      <l-marker v-for="(marker) in this.$store.getters.getRouteMarkers"
+                :lat-lng="marker"
+                :key="marker.id"></l-marker>
     </div>
 
   </div>
