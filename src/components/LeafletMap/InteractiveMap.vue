@@ -19,7 +19,7 @@
         }"
         @click="mapClick"
       >
-        <l-tile-layer :url="this.$store.getters.getTileLayer"></l-tile-layer>
+        <l-tile-layer :url="this.getTileLayer()"></l-tile-layer>
         <FeatureLayer></FeatureLayer>
       </l-map>
     </div>
@@ -29,6 +29,7 @@
 <script>
 import { latLngBounds, latLng } from 'leaflet'
 import FeatureLayer from './FeatureLayer'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'InteractiveMap',
@@ -52,6 +53,7 @@ export default {
     }
   },
   methods: {
+    ...mapGetters(['getTileLayer']),
     zoomUpdated (zoom) {
       this.zoom = zoom
     },

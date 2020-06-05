@@ -1,16 +1,18 @@
-import $ from 'jquery'
+import axios from 'axios'
+
 export async function calculateRoute (app, point1, point2) {
   let requestData = null
   const point1String = JSON.stringify(point1).replace('[', '').replace(']', '')
   const point2String = JSON.stringify(point2).replace('[', '').replace(']', '')
 
-  await $.get('https://api.openrouteservice.org/v2/directions/foot-hiking?api_key=5b3ce3597851110001cf6248b1426a0951e44ffab46db840dab08c5a&start=' + point1String + '1&end= + ' + point2String,
-    function (responseText) {
-      requestData = responseText
-      addMarkers(app, requestData.features[0])
-    })
+  requestData = await axios.get('https://api.openrouteservice.org/v2/directions/foot-hiking?api_key=' +
+    '5b3ce3597851110001cf6248b1426a0951e44ffab46db840dab08c5a&start=' + point1String + '1&end= + ' + point2String)
 
-  return requestData
+  await addMarkers(app, requestData.data.features[0])
+
+  console.log(requestData.data)
+
+  return requestData.data
 }
 
 async function addMarkers (app, feature) {
@@ -22,8 +24,4 @@ async function addMarkers (app, feature) {
   currentRouteMarkers.push(coord2)
 
   app.$store.commit('setRouteMarkers', currentRouteMarkers)
-}
-
-export async function removeMarkers (app, feature) {
-  app.$store.commit('setRouteMarkers', [])
 }

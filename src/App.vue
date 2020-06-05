@@ -10,7 +10,7 @@
 import InteractiveMap from './components/LeafletMap/InteractiveMap'
 import Popups from './components/Popups'
 import Overlay from './components/Overlay'
-import { fetchBaseData } from './services/overpass'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
@@ -25,11 +25,13 @@ export default {
       drawer: true
     }
   },
-  methods: {},
-  async beforeMount () {
+  methods: {
+    ...mapActions(['downloadBaseData'])
+
+  },
+  async mounted () {
     this.$store.commit('setLoadingState', true)
-    this.$store.commit('setBaseData', await fetchBaseData(this))
-    this.$store.commit('')
+    this.$store.commit('setBaseData', this.downloadBaseData())
     this.$store.commit('setLoadingState', false)
   }
 }
