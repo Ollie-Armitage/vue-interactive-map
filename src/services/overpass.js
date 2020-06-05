@@ -1,7 +1,9 @@
+import axios from 'axios'
 
 const boundingBox = '(51.37392356762,-2.3350667953491,51.382481939058,-2.3199713230133)'
-
-const baseDataQuery = '' +
+export const wizardLink = 'https://overpass-api.de/api/interpreter?data=[out:json];'
+export const overpassLink = 'https://overpass-api.de/api/interpreter?data=[out:json];'
+export const baseDataQuery = '' +
   '(way["building"]' + boundingBox + ';' +
   'way["addr:housename"]' + boundingBox + ';' +
   'way["construction"]' + boundingBox + ';' +
@@ -14,95 +16,36 @@ const baseDataQuery = '' +
   'node["bus"]' + boundingBox + ';' +
   'way["amenity"]' + boundingBox + ';' +
   'node["entrance"]' + boundingBox + ';)'
+export const trailer = ';out;>;out;'
 
-export function OverpassQueryToLink (app, query) {
+export function getBaseQuery () {
+  return overpassLink + baseDataQuery + trailer
+}
+
+function getKeyOverpassFilterQuery (query) {
   if (query === '') return null
 
-  query = query.replace('&', '%26')
-  const overpassLink = 'https://overpass-api.de/api/interpreter?data=[out:json];'
-  const trailer = ';out;>;out;'
-
-  // Tags to to search through
-
-  /*  const categoryList = ['name', 'addr:housenumber']
+  query = fixQuery(query)
 
   let finalQuery = '('
 
-  if (categoryList.includes(query)) {
-    finalQuery = finalQuery + 'node["' + query + '"]' + boundingBox + ';way["' + query + '"]' + boundingBox + ';relation["' + query + '"]' + boundingBox + ';)'
-  }
+  finalQuery = finalQuery +
+    'node["' + query + '"]' + boundingBox + ';' +
+    'way["' + query + '"]' + boundingBox + ';' +
+    'relation["' + query + '"]' + boundingBox + ';'
 
-  categoryList.forEach(function (item) {
-    finalQuery = finalQuery +
-      'node["' + item + '" = "' + query + '"]' + boundingBox + ';' +
-      'way["' + item + '" = "' + query + '" ]' + boundingBox + ';' +
-      'relation["' + item + '" = "' + query + '"]' + boundingBox + ';'
-  })
+  finalQuery = finalQuery + ')'
 
-  finalQuery = finalQuery + ')' */
-
-  return overpassLink + query + trailer
+  return overpassLink + finalQuery + trailer
 }
 
-// Build the base data query for the map.
-
-export function buildBaseDataQuery () {
-  /* const categoryList = ['name', 'addr:housenumber']
-
-  let finalQuery = '('
-
-  categoryList.forEach(function (item) {
-    finalQuery = finalQuery +
-      'node["' + item + '"]' + boundingBox + ';' +
-      'way["' + item + '"]' + boundingBox + ';' +
-      'relation["' + item + '"]' + boundingBox + ';'
-  })
-
-  finalQuery = finalQuery + ')' */
-  return baseDataQuery
+function fixQuery (query) {
+  return query.replace('&', '%26')
 }
 
-/*
-export async function fetchBaseDataNames (app) {
-  const baseData = app.$store.getters.getBaseData
-
-  const nameList = []
-
-  baseData.forEach((feature) => {
-    nameList.push(feature.name)
-  })
-
-  return nameList
-} */
-
-/*
-export async function getNamedLocationCoordinates (app, locationName) {
-  let returnValue = null
-
-  return await OverpassQueryToLink(app, locationName).then((output) => {
-    output.features.forEach((feature) => {
-      if (feature.geometry.type === 'Point' && feature.properties.entrance === 'yes') {
-        returnValue = feature.geometry.coordinates
-      }
-    })
-
-    if (returnValue === null) {
-      output.features.forEach((feature) => {
-        if (feature.geometry.type === 'Point') {
-          returnValue = feature.geometry.coordinates
-        }
-      })
-    }
-
-    if (returnValue === null) {
-      output.features.forEach((feature) => {
-        if (feature.geometry.type === 'Polygon') {
-          returnValue = feature.geometry.coordinates[0][0]
-        }
-      })
-    }
-
-    return returnValue
-  })
+export async function downloadFilterData (app, query) {
+  const osmtogeojson = require('osmtogeojson')
+  const overpassLink = getKeyOverpassFilterQuery(query)
+  const overpassData = await axios.get(overpassLink)
+  return osmtogeojson(overpassData.data)
 }
-*/

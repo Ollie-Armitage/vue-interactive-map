@@ -9,8 +9,8 @@
     </div>
 
     <div v-if="this.getFilterLoading() === false">
-      <div v-if="this.getFilterData() !== null">
-        <l-geo-json :geojson="this.getFilterData()"
+      <div v-if="this.getSelectedFilter() !== null">
+        <l-geo-json :geojson="this.getSelectedFilter()"
                     :options=filterOptions></l-geo-json>
       </div>
     </div>
@@ -47,11 +47,11 @@ export default {
     LGeoJson
   },
   methods: {
-    ...mapGetters(['getSelectedValue', 'getCurrentRoute', 'getRouteMarkers', 'getLoadingState', 'getBaseData', 'getBaseLoading', 'getFilterLoading', 'getFilterData']),
+    ...mapGetters(['getSelectedValue', 'getCurrentRoute', 'getRouteMarkers', 'getLoadingState', 'getBaseData', 'getBaseLoading', 'getFilterLoading', 'getSelectedFilter']),
     onEachFeatureFunction (app) {
       return function onEachFeature (feature, layer) {
         layer.on('click', function (event) {
-          console.log(event.target.feature)
+          // console.log(event.target.feature)
           app.$store.commit('setSelectedValue', event.target.feature)
         })
       }
@@ -75,7 +75,8 @@ export default {
       filterOptions: {
         style: function (feature) {
           return {
-            weight: 0
+            weight: 4,
+            color: '#2a5bdb'
           }
         },
         filter: function (feature) {
@@ -89,12 +90,6 @@ export default {
             weight: 4,
             color: '#FF0000'
           }
-        },
-        onEachFeature: function onEachFeature (feature, layer) {
-          if (feature.properties) {
-            const str = JSON.stringify(feature.properties, null, 2)
-            layer.bindPopup(str)
-          }
         }
       },
       routeOptions: {
@@ -102,12 +97,6 @@ export default {
           return {
             weight: 4,
             color: '#33384d'
-          }
-        },
-        onEachFeature: function onEachFeature (feature, layer) {
-          if (feature.properties) {
-            const str = JSON.stringify(feature.properties, null, 2)
-            layer.bindPopup(str)
           }
         }
       }

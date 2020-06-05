@@ -41,26 +41,28 @@
           <v-icon>mdi-map-marker</v-icon>
         </v-btn>
 
-        <v-btn>
-          <span>Filters</span>
-          <v-icon>mdi-puzzle-plus-outline</v-icon>
-        </v-btn>
+        <v-menu top :offset-y="true">
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on">
+              <span>Filters</span>
+              <v-icon>mdi-puzzle-plus-outline</v-icon>
+            </v-btn>
 
-        <v-menu
-          bottom
-          origin="center center"
-          transition="scale-transition">
+          </template>
           <v-list>
             <v-list-item
-              v-for="(item, i) in items"
-              :key="i"
+              v-for="(item) in filterList"
+              :key="item.id"
+              @click="applyFilter(item)"
             >
-              <v-list-item-title></v-list-item-title>
+
+              <v-list-item-title>{{ item }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
 
       </v-bottom-navigation>
+
     </div>
 
     <!--  Directions Settings Bar -->
@@ -125,7 +127,7 @@
         v-model=propertiesBar>
         <v-app-bar color="#33384d" dark>{{propertyList.name}} Properties
           <v-spacer></v-spacer>
-          <v-btn rounded @click="propertiesBar = !propertiesBar">
+          <v-btn rounded @click="closeProperties">
             <v-icon dark>mdi-close</v-icon>
           </v-btn>
         </v-app-bar>
@@ -146,11 +148,12 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { calculateRoute } from '../services/openrouteservice'
+import { downloadFilterData } from '../services/overpass'
 
 export default {
   name: 'overlay-layer',
   computed: {
-    ...mapGetters(['getBaseData', 'getCurrentRoute', 'getLoadingState', 'getSelectedValue']),
+    ...mapGetters(['getBaseData', 'getCurrentRoute', 'getLoadingState', 'getSelectedValue', 'getDownloadedFilters']),
     ...mapState(['baseData']),
     storedBaseData () {
       return this.getBaseData
@@ -166,6 +169,7 @@ export default {
       }
     },
     currentlySelectedValue (value) {
+      if (value == null) return null
       if (typeof value.then !== 'function') {
         this.propertyList = value.properties
         this.openPropertiesBar()
@@ -183,10 +187,32 @@ export default {
       searchBarDataList: null,
       searchBarDataListDetails: null,
       propertiesBar: false,
-      propertyList: null
+      propertyList: null,
+      filterList: ['shop', 'wheelchair', 'no filter'],
+      filterListOn: false
     }
   },
   methods: {
+    async applyFilter (filterName) {
+      const downloadedFilters = this.getDownloadedFilters
+
+      let currentFilter = null
+
+      downloadedFilters.forEach((filter) => {
+        if (filterName === filter[0]) currentFilter = filter[1]
+      })
+
+      if (currentFilter === null) {
+        await downloadedFilters.push(await downloadFilterData(this, filterName))
+        currentFilter = downloadedFilters[downloadedFilters.length - 1]
+      }
+
+      this.$store.commit('setSelectedFilter', currentFilter)
+    },
+    closeProperties () {
+      this.propertiesBar = !this.propertiesBar
+      this.$store.commit('setSelectedValue', null)
+    },
     updateSearchBarDataList () {
       if (this.getBaseData === null) return null
 
