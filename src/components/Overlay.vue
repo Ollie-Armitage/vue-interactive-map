@@ -5,6 +5,7 @@
 
     <v-autocomplete
       @keydown.enter="newSearch($event.target.value)"
+      @update:search-input="newSearch($event)"
       :items=searchBarDataList
       outlined background-color="white"
       style="margin: 20px;">
@@ -189,7 +190,8 @@ export default {
       propertiesBar: false,
       propertyList: null,
       filterList: ['shop', 'wheelchair', 'no filter'],
-      filterListOn: false
+      filterListOn: false,
+      searchValue: null
     }
   },
   methods: {
@@ -251,6 +253,7 @@ export default {
       })
     },
     async newSearch (search) {
+      console.log('Searching with: ' + search)
       this.$store.commit('setLoadingState', true)
 
       let searchValue = null
