@@ -31,4 +31,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 University Project.
 
-Simple interactive map application writteni n Vue.
+Simple interactive map application written in Vue.
